@@ -35,7 +35,7 @@ import bpy
 from bpy.app.handlers import persistent
 
 
-def set_parent(self, context):
+def sj_set_parent(self, context):
     """set parent"""
     if len(context.selected_objects) == 0:
         self.obj_parnet = None
@@ -60,7 +60,7 @@ def callback_get_parent(self):
 class SJHandyNatorProperties(bpy.types.PropertyGroup):
     r"""カスタムプロパティを定義する"""
     # obj_parnet: bpy.props.StringProperty(name="Parent", update=set_parent)
-    obj_parnet: bpy.props.PointerProperty(name="Parent", type=bpy.types.Object, update=set_parent)
+    obj_parnet: bpy.props.PointerProperty(name="Parent", type=bpy.types.Object, update=sj_set_parent)
 
 
 class SJHandySelTree(bpy.types.Operator):
