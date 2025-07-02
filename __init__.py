@@ -37,6 +37,8 @@ from bpy.app.handlers import persistent
 
 def sj_set_parent(self, context):
     """set parent"""
+    if context is None:
+        return
     if len(context.selected_objects) == 0:
         self.obj_parnet = None
     for obj in bpy.context.selected_objects:
@@ -132,6 +134,7 @@ class SJHandyLy(object):
 class SJHandyNator(bpy.types.Panel):
     """UI"""
     bl_label = "SJ Handy Nator"
+    bl_idname = "SJHANDYNATOR_PT_PANEL"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'  # UIのタイプ
     # bl_context = "posemode"  # カスタムタブは名前を指定するだけで問題ない 他のツールのタブにも追加できる
