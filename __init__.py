@@ -34,19 +34,36 @@ bl_info = {
 import bpy
 from bpy.app.handlers import persistent
 
+# 再帰防止フラグ
+_updating_parent = False
 
 def sj_set_parent(self, context):
     """set parent"""
+    global _updating_parent
+    
+    # 再帰防止チェック
+    if _updating_parent:
+        return
+        
     if context is None:
         return
+
     if len(context.selected_objects) == 0:
-        self.obj_parnet = None
-    for obj in bpy.context.selected_objects:
-        wmx = obj.matrix_world
-        obj.parent = self.obj_parnet
-        # これだと逆行列が適応されてしまうのでダメ
-        # obj.matrix_parent_inverse = actor_offset_root.matrix_world.inverted()
-        obj.matrix_world = wmx
+        return
+    
+    # フラグを設定して再帰を防止
+    _updating_parent = True
+    
+    try:
+        for obj in bpy.context.selected_objects:
+            wmx = obj.matrix_world
+            obj.parent = self.obj_parnet
+            # これだと逆行列が適応されてしまうのでダメ
+            # obj.matrix_parent_inverse = actor_offset_root.matrix_world.inverted()
+            obj.matrix_world = wmx
+    finally:
+        # 必ずフラグをリセット
+        _updating_parent = False
 
 
 @persistent
